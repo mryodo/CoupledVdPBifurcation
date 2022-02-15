@@ -9,7 +9,12 @@ where ![equation-2](https://user-images.githubusercontent.com/6823593/154071905-
 
 The code provides the following functionality:
 
-1. Solution
+1. High tolerance solution of the VdP system through `Tsit5()` routine with interpolation to the unfiorm mesh
+2. Extraction of the naive limit cycle out of the solution
+3. Perturbation of the LC with the given distance to the LC
+4. Numerical definition of the vertical displacement and the phase different of the system
+5. Numerical definition of the time to the limit cycle
+6. Plotting routine of the paper [TBD][TBD]
 
 
 ### Necessary header and dependencies
@@ -35,3 +40,6 @@ Plots.scalefontsizes(1.5);
 using Printf
 using LaTeXStrings
 ```
+
+
+## `VdPMoudule.jl` functions
