@@ -45,7 +45,7 @@ using LaTeXStrings
 ```
 
 
-## `VdPMoudule.jl` functions
+## `VdPModule.jl` functions
 
 | function  | Inputs | Outputs| Notes |
 | ------------- | ------------- | ------------- | ------------- |
