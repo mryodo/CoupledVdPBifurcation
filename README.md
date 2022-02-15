@@ -79,3 +79,7 @@ T=2*π;
 mu=1.5;
 getPhiC(mu, 100*T)
 ```
+
+**Additionally, `PhiC_calc.jl` performs run of `getPhiC` through several couplings and plots the `C\phi` diagram from the paper.**
+
+## 123
