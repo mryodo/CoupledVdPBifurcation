@@ -139,3 +139,99 @@ indx=findfirst(x->x<thr, dists_x3);
 time2LC=indx/pNum2;
 ```
 **Additionally, `time2LC_calc.jl` performs run of extracting the distance to the LC through several couplings and plots the `time to the LC` diagram from the paper for different phases of the initially pertrubed point.**
+
+## Illustrative plotting examples 
+
+### Examples of the Solutions
+
+```julia
+T=2*π;
+n=100;
+tspan=(0.0, n*T);
+Δω=0.2; μ=0.25; p=(Δω, μ);
+
+u0=[3; 0; 1; 0];
+problem=ODEProblem(f, u0, tspan, p);
+t, x, dx, y, dy=vpdSolve(problem, true, 10);
+γ_x, γ_dx, γ_y, γ_dy=getLimCycleNaive(t, x, dx, y, dy);
+γ=(γ_x, γ_dx, γ_y, γ_dy);
+pNum=size(γ_x, 1);
+
+u=0.5*(x+y); v=0.5*(x-y);
+du=0.5*(dx+dy); dv=0.5*(dx-dy);
+
+pgfplotsx()
+
+plot(layout=grid(2, 2, heights=[0.5 ,0.5, 0.5, 0.5], widths=[0.75, 0.25, 0.75, 0.25]))
+plot!(t[end-5*pNum:end], x[end-5*pNum:end], color=cols[11], sp=1, lw=3, labels=L"x/\dot{x}")
+plot!(t[end-5*pNum:end], y[end-5*pNum:end], color=cols[2], sp=1, lw=3, labels=L"y/\dot{y}",)
+title!(L"\textrm{S}\textrm{olutions\; in \;time}", titlefontsize=14, sp=1)
+ylabel!(L"\textrm{oscillators \; }\{x(t), y(t)\}", yguidefontsize=12, sp=1, )
+plot!(lest_margin=8Plots.mm, sp=1)
+
+plot!(t[end-5*pNum:end], u[end-5*pNum:end], color=cols[9], sp=3, lw=3, labels=L"u/\dot{u}")
+plot!(t[end-5*pNum:end], v[end-5*pNum:end], color=cols[4], sp=3, lw=3, labels=L"v/\dot{v}")
+ylabel!(L"\textrm{half-sum/diff \; }\{u(t), v(t)\}", yguidefontsize=12, sp=3, )
+xlabel!(L"\textrm{time,\;} t", xguidefontsize=14, sp=3,)
+
+plot!(x[1:10*pNum], dx[1:10*pNum], line=(:dot), sp=2, color=cols[11], alpha=0.75, lw=3, labels="")
+plot!(y[1:10*pNum], dy[1:10*pNum], line=(:dot), sp=2, color=cols[2], alpha=0.75, lw=3,  labels="")
+ylabel!(L"\textrm{derivatives}",yguidefontsize=12, sp=2, )
+title!(L"\textrm{P}\textrm{hase\; portraits}", titlefontsize=14, sp=2)
+
+plot!(u[1:10*pNum], du[1:10*pNum], line=(:dot), sp=4, color=cols[9], alpha=0.75, lw=3, labels="")
+plot!(v[1:10*pNum], dv[1:10*pNum], line=(:dot), sp=4, color=cols[4], alpha=0.75, lw=3, labels="", legend_position=:bottomright, legendmarkerstroke=1)
+ylabel!(L"\textrm{derivatives}",yguidefontsize=12, sp=4, )
+xlabel!(L"\textrm{functions}", xguidefontsize=14, sp=4, )
+plot!(size=(1000, 500), bottom_margin=4Plots.mm, left_margin=4Plots.mm)
+```
+![figure1](https://user-images.githubusercontent.com/6823593/154083776-9789dbb4-cdde-4708-9759-fbe407007c15.png)
+
+### Amplitudes and half-sum/half-difference example
+
+```julia
+amps=zeros(4);
+mus=[0.25, 0.5, 1, 3];
+refcols=[cols[1]; cols[11]; cols[9]; cols[10] ];
+plot(layout=@layout [
+    a{0.83w, 1.0h} [b{0.9h}; _]])
+for i in 1:size(mus,1)
+    global mus, amps
+    μ=mus[i];
+    t=2*π;
+    n=100;
+    tspan=(0.0, n*T);
+    Δω=0.2; p=(Δω, μ);
+
+    u0=[3; 0; 1; 0];
+    problem=ODEProblem(f, u0, tspan, p);
+    t, x, dx, y, dy=vpdSolve(problem, true, 10);
+    γ_x, γ_dx, γ_y, γ_dy=getLimCycleNaive(t, x, dx, y, dy);
+    γ=(γ_x, γ_dx, γ_y, γ_dy);
+    pNum=size(γ_x, 1);
+    
+    u=0.5*(x+y); v=0.5*(x-y);
+    du=0.5*(dx+dy); dv=0.5*(dx-dy);
+    amps[i]=maximum(v[end-pNum:end]);
+    plot!(t[1:10*pNum], v[1:10*pNum], lw=3, color=refcols[i], sp=1, labels="")
+    scatter!([mus[i]], [amps[i]], xscale=:log10, yscale=:log10, sp=2,
+        labels=L"\mu=%$(μ)", 
+        legend_position=:top,
+        marker=(:circle, 5),
+        xtickfont = font(10),
+        ytickfont = font(10),
+        color=refcols[i]
+    )
+end
+ylims!(10^(-1.2), 10^(1.9), sp=2)
+xlabel!(L"\mathrm{time, \; } t", sp=1)
+ylabel!(L"\mathrm{half-difference,\;} v(t)", sp=1)
+
+yticks!([0.1, 1], sp=2)
+xlabel!(L"\mathrm{coupling, \; } \mu", sp=2, xguidefontsize=11)
+ylabel!(L"\mathrm{amplitude}", sp=2, yguidefontvalign =:bottom, yguidefontsize=11)
+plot!(size=(900, 400), bottom_margin=5Plots.mm, left_margin=4Plots.mm)
+```
+
+![figure2](https://user-images.githubusercontent.com/6823593/154084090-2bbd0822-b2af-48d0-9e16-63a9c0751f76.png)
+
