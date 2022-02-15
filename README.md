@@ -43,3 +43,8 @@ using LaTeXStrings
 
 
 ## `VdPMoudule.jl` functions
+
+| function  | Inputs | Outputs| Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| Content Cell  | Content Cell  | Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  | Content Cell  | Content Cell  |
