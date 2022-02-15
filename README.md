@@ -1,4 +1,7 @@
-# CoupledVdPBifurcation
+[![DOI](https://zenodo.org/badge/459579858.svg)](https://zenodo.org/badge/latestdoi/459579858)
+
+
+# Coupled VdP Bifurcation [Julia code]
 Julia code for the examination of dissipatively coupled van der Pol equations in the form
 
 ![equation](https://user-images.githubusercontent.com/6823593/154071584-f720fe84-0247-4b2a-aeb5-52cd45ddce6a.png)
