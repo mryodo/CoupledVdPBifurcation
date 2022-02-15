@@ -46,5 +46,11 @@ using LaTeXStrings
 
 | function  | Inputs | Outputs| Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  |
+| `f(du, u, p, t)`  | Content Cell  | Content Cell  | Content Cell  |
+| `vpdSolve(problem::ODEProblem, interp::Bool, mult::Int64)`  | Content Cell  | Content Cell  | Content Cell  |
+| `getLimCycleNaive(t, x, dx, y, dy)` | | | |
+| `getDD(x::Float64, dx::Float64, y::Float64, dy::Float64, p::Tuple{Float64, Float64})` | | | |
+| `getNewDot(eps::Float64, x::Float64, dx::Float64, y::Float64, dy::Float64, p::Tuple{Float64, Float64})` | | | |
+| `dsquare(x,y)` | | | |
+| `minimumdistance(x,y)` | | | |
+| `getDists(x, dx, y, dy, γ, radius::Int)` | | | |
