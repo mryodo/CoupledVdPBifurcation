@@ -66,3 +66,16 @@ u0=[3; 0; 3; 0];
 problem=ODEProblem(f, u0, tspan, p);
 t, x, dx, y, dy=vpdSolve(problem, true, 10);
 ```
+
+## `PhiC_calc.jl` functions
+| function  | Inputs | Outputs| Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| `getPhiC(mu::Float64, Tstar::Float64)` | `mu` – coupling <br> `Tstar` – moment of calculation (consider the paper) | `phi` – phase difference <br> `C` – vertical displacement | Returns the vertical displacement and phase difference directly from definition |
+
+### Minimal run of the Phi/C extraction
+
+```julia
+T=2*π;
+mu=1.5;
+getPhiC(mu, 100*T)
+```
