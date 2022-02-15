@@ -82,4 +82,60 @@ getPhiC(mu, 100*T)
 
 **Additionally, `PhiC_calc.jl` performs run of `getPhiC` through several couplings and plots the `C\phi` diagram from the paper.**
 
-## 123
+## `time2LC_calc..jl` functions
+
+| function  | Inputs | Outputs| Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| `getDistsSmooth(dists_x, t, pNum))` | `dists_x` – distances to `x/dx`-LC, output from `getDists` <br> `t` – time, output from `vpdSolve`, `pNum` – number of dots per LC, `size(γ_x, 1)` | `dists_x_sm` – smoothed distances <br> `t` – correponding (truncated) time | Smoothes by averaging the distances to the LC in the period window |
+| `coef(x, y)` |`x` and `y` – 1-d array | `k` – optimal slope by pseudo-inverse |  `Julia`-optimal linreg slope  |
+
+### Minimal run to get distance to the LC
+```julia
+T=2*π;
+n=100;
+tspan=(0.0, n*T);
+Δω=0.2; μ=1.5; p=(Δω, μ);
+
+#solve the system to get the LC
+u0=[3; 0; 3; 0];
+problem=ODEProblem(f, u0, tspan, p);
+mult=10;
+t, x, dx, y, dy=vpdSolve(problem, true, mult);
+γ_x, γ_dx, γ_y, γ_dy=getLimCycleNaive(t, x, dx, y, dy);
+γ=(γ_x, γ_dx, γ_y, γ_dy);
+
+# get the perturbed point
+D_0=0.1;
+indx=pNum ÷ 3;
+u0=getNewDot(D_0, γ_x[indx], γ_dx[indx], γ_y[indx], γ_dy[indx], p);
+
+#solve the system from the perturbed point
+n2=10;
+mult2=mult;
+tspan2=(0.0, n2*T);
+problem2=ODEProblem(f, u0, tspan2, p);
+t2, x, dx, y, dy=vpdSolve(problem2, true, mult2);
+γ_x2, γ_dx2, γ_y2, γ_dy2=getLimCycleNaive(t2, x, dx, y, dy);
+pNum2=size(γ_x2, 1);
+
+#get the distances
+till=8;
+radius=20;
+dists_x, dists_y=getDists(x[1:Int(round(till*size(x, 1)/n2))],
+    dx[1:Int(round(till*size(x, 1)/n2))],
+    y[1:Int(round(till*size(x, 1)/n2))],
+    dy[1:Int(round(till*size(x, 1)/n2))],
+    γ, radius
+);
+
+#smooth the distances
+dists_x3, t32=getDistsSmooth(dists_x, t2[1:Int(round(till*size(x, 1)/n2))], pNum2);
+dists_x3 /= D_0; 
+dists_x3, t32=getDistsSmooth(dists_x3, t32, pNum2);
+
+#find the moment when the distance is small enough
+thr= 10*1e-3; 
+indx=findfirst(x->x<thr, dists_x3); 
+time2LC=indx/pNum2;
+```
+**Additionally, `time2LC_calc.jl` performs run of extracting the distance to the LC through several couplings and plots the `time to the LC` diagram from the paper for different phases of the initially pertrubed point.**
