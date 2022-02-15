@@ -1,11 +1,9 @@
 # CoupledVdPBifurcation
 Julia code for the examination of dissipatively coupled van der Pol equations in the form
-<img src="https://render.githubusercontent.com/render/math?math=
-\begin{cases}
-  \ddot{x}-(1-x^2)\dot x +(1-\Delta \omega)x - \mu  ( \dot x -\dot y)=0 \\
-    \ddot{x}-(1-y^2)\dot y +(1+\Delta \omega)y - \mu  ( \dot y -\dot x)=0
-\end{cases}
-">
+
+![equation](https://user-images.githubusercontent.com/6823593/154071584-f720fe84-0247-4b2a-aeb5-52cd45ddce6a.png)
+
+
 
 The code provides the following functionality:
 1. 
