@@ -47,10 +47,22 @@ using LaTeXStrings
 | function  | Inputs | Outputs| Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | `f(du, u, p, t)`  | `du` – LHS <br> `u`, `t` – variables <br> `p`  – collection of the parameters, `tuple` | RHS of the system  | Template RHS for `DifferentialEqualtions` module  |
-| `vpdSolve(problem::ODEProblem, interp::Bool, mult::Int64)`  | Content Cell  | Content Cell  | Content Cell  |
-| `getLimCycleNaive(t, x, dx, y, dy)` | | | |
-| `getDD(x::Float64, dx::Float64, y::Float64, dy::Float64, p::Tuple{Float64, Float64})` | | | |
-| `getNewDot(eps::Float64, x::Float64, dx::Float64, y::Float64, dy::Float64, p::Tuple{Float64, Float64})` | | | |
-| `dsquare(x,y)` | | | |
-| `minimumdistance(x,y)` | | | |
-| `getDists(x, dx, y, dy, γ, radius::Int)` | | | |
+| `vpdSolve(problem::ODEProblem, interp::Bool, mult::Int64)`  | `ODEProblem` input (see below) <br> `interp` – keep `true` for now, check if the mesh should be uniform <br> `mult` – multiplier of number of points for interpolation  | `t, x, dx, y, dx` arrays  | Wrapper on Solver + interpolation to the uniform mesh  |
+| `getLimCycleNaive(t, x, dx, y, dy)` | solution of `vpdSolve` | `γ_x, γ_dx, γ_y, γ_dy` – LC | Naive LC exteractor, returns last cycle |
+| `getDD(x::Float64, dx::Float64, y::Float64, dy::Float64, p::Tuple{Float64, Float64})` | `p` – `tuple` of parameters | `ddx`, `ddy` | Extractor of the second derivatives in the given point |
+| `getNewDot(eps::Float64, x::Float64, dx::Float64, y::Float64, dy::Float64, p::Tuple{Float64, Float64})` | `eps` – the distanceto the LC <br> `x, dx, y, dy` – point of the LC being perturbed <br> `p` – `tuple` of parameters | `u0` – initial point for the solver | Extractor of the initial perturbation exactly `eps`-away from the LC |
+| `dsquare(x,y)` | 2 2-d points|  | returns euclidian distance between to points |
+| `minimumdistance(x,y)` | `x` – given point, 2x1 <br> `y` – array of points, n x 2  | minimal distance from `x` to `y` and the index of the smallest distance | |
+| `getDists(x, dx, y, dy, γ, radius::Int)` | `x, dx, y, dy` – output of `vdpSolve`<br> `γ` – LC <br> radius – technical; how far away from the previous point we search the minimal distance for the new point   | `dists_x`, `dists_y` – arrays of distances from the solution to the corresponding LC | |
+
+### Minimal run of the solver
+```julia
+T=2*π;
+n=100;
+tspan=(0.0, n*T);
+Δω=0.2; μ=0.6; p=(Δω, μ);
+
+u0=[3; 0; 3; 0];
+problem=ODEProblem(f, u0, tspan, p);
+t, x, dx, y, dy=vpdSolve(problem, true, 10);
+```
