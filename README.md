@@ -46,8 +46,7 @@ using LaTeXStrings
 
 | function  | Inputs | Outputs| Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| `f(du, u, p, t)`  | `du` -- LHS
-`u`, `t` -- variables
+| `f(du, u, p, t)`  | `du` -- LHS <br> `u`, `t` -- variables <br>
 `p`  -- collection of the parameters, `tuple` | RHS of the system  | Template RHS for `DifferentialEqualtions` module  |
 | `vpdSolve(problem::ODEProblem, interp::Bool, mult::Int64)`  | Content Cell  | Content Cell  | Content Cell  |
 | `getLimCycleNaive(t, x, dx, y, dy)` | | | |
