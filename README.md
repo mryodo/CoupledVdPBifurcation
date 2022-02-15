@@ -24,4 +24,4 @@ Plots.scalefontsizes(1.5);
 
 using Printf
 using LaTeXStrings
-``
+```
